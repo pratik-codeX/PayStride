@@ -73,8 +73,6 @@ String defaultPassword = (request.getPhone() != null && !request.getPhone().isEm
     : "password123";
 worker.setPassword(passwordEncoder.encode(defaultPassword));
 
-
-
         Worker saved = workerRepository.save(worker);
         return WorkerResponse.from(saved);
     }

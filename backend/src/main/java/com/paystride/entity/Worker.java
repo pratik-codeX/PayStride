@@ -51,6 +51,7 @@ public class Worker {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
 public String getWorkerCode() { return workerCode; }
 public void setWorkerCode(String workerCode) { this.workerCode = workerCode; }
 
