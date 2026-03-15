@@ -7,7 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
+import com.paystride.entity.Worker;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,6 +41,27 @@ public class JwtUtil {
                 .signWith(getSigningKey())
                 .compact();
     }
+	public String generateWorkerToken(Worker worker) {
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("workerId", worker.getId());
+    claims.put("companyId", worker.getCompany().getId());
+    claims.put("role", "WORKER");
+    claims.put("name", worker.getName());
+
+    return Jwts.builder()
+            .claims(claims)
+            .subject(worker.getWorkerCode())
+            .issuedAt(new Date())
+            .expiration(new Date(System.currentTimeMillis() + expiration))
+            .signWith(getSigningKey())
+            .compact();
+}
+
+public Long extractWorkerId(String token) {
+    Object workerId = extractAllClaims(token).get("workerId");
+    if (workerId == null) return null;
+    return Long.valueOf(workerId.toString());
+}
 
     public Claims extractAllClaims(String token) {
         return Jwts.parser()

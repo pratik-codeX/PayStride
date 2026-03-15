@@ -12,5 +12,7 @@ public interface PayrollSummaryRepository extends JpaRepository<PayrollSummary, 
 
     List<PayrollSummary> findByCompanyIdAndMonthYear(Long companyId, String monthYear);
 
+List<PayrollSummary> findByWorkerIdOrderByMonthYearDesc(Long workerId);
+
     Optional<PayrollSummary> findByWorkerIdAndMonthYear(Long workerId, String monthYear);
 }

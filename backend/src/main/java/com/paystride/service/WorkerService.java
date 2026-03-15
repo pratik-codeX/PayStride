@@ -1,5 +1,6 @@
 package com.paystride.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.paystride.dto.WorkerRequest;
 import com.paystride.dto.WorkerResponse;
 import com.paystride.entity.Company;
@@ -18,11 +19,15 @@ public class WorkerService {
     private final WorkerRepository workerRepository;
     private final CompanyRepository companyRepository;
 
-    public WorkerService(WorkerRepository workerRepository,
-                         CompanyRepository companyRepository) {
-        this.workerRepository = workerRepository;
-        this.companyRepository = companyRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
+
+public WorkerService(WorkerRepository workerRepository,
+                     CompanyRepository companyRepository,
+                     PasswordEncoder passwordEncoder) {
+    this.workerRepository = workerRepository;
+    this.companyRepository = companyRepository;
+    this.passwordEncoder = passwordEncoder;
+}
 
     public List<WorkerResponse> getAllWorkers() {
         Long companyId = TenantContext.get();
@@ -59,6 +64,16 @@ public class WorkerService {
         worker.setHourlyRate(request.getHourlyRate());
         worker.setJoiningDate(request.getJoiningDate());
         worker.setActive(true);
+	// Auto-generate worker code: WRK001, WRK002 etc
+long count = workerRepository.count() + 1;
+worker.setWorkerCode("WRK" + String.format("%03d", count));
+// Default password is their phone number, or "password123" if no phone
+String defaultPassword = (request.getPhone() != null && !request.getPhone().isEmpty())
+    ? request.getPhone()
+    : "password123";
+worker.setPassword(passwordEncoder.encode(defaultPassword));
+
+
 
         Worker saved = workerRepository.save(worker);
         return WorkerResponse.from(saved);

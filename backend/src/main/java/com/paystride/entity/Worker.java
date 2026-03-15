@@ -39,10 +39,22 @@ public class Worker {
 
     @Column(name = "joining_date")
     private LocalDate joiningDate;
+	
+	@Column(name = "worker_code", unique = true)
+	private String workerCode;
 
+	@Column(name = "password")
+	private String password;
+	
     @Builder.Default
     private boolean active = true;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+public String getWorkerCode() { return workerCode; }
+public void setWorkerCode(String workerCode) { this.workerCode = workerCode; }
+
+public String getPassword() { return password; }
+public void setPassword(String password) { this.password = password; }
+
 }

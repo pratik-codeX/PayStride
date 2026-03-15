@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface WorkerRepository extends JpaRepository<Worker, Long> {
     List<Worker> findByCompanyIdAndActiveTrue(Long companyId);
     Optional<Worker> findByIdAndCompanyId(Long id, Long companyId);
+    Optional<Worker> findByWorkerCode(String workerCode);
 }
