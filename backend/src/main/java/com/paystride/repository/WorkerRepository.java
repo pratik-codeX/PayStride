@@ -9,7 +9,14 @@ import java.util.Optional;
 
 @Repository
 public interface WorkerRepository extends JpaRepository<Worker, Long> {
-    List<Worker> findByCompanyIdAndActiveTrue(Long companyId);
+
     Optional<Worker> findByIdAndCompanyId(Long id, Long companyId);
+
+    List<Worker> findByCompanyIdAndActiveTrue(Long companyId);
+
+    List<Worker> findByCompanyId(Long companyId);
+
     Optional<Worker> findByWorkerCode(String workerCode);
+
+    long countByCompanyIdAndActiveTrue(Long companyId);
 }

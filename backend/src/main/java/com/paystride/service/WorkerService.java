@@ -8,6 +8,7 @@ import com.paystride.entity.Worker;
 import com.paystride.repository.CompanyRepository;
 import com.paystride.repository.WorkerRepository;
 import com.paystride.security.TenantContext;
+import com.paystride.util.PasswordValidationUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -64,14 +65,15 @@ public WorkerService(WorkerRepository workerRepository,
         worker.setHourlyRate(request.getHourlyRate());
         worker.setJoiningDate(request.getJoiningDate());
         worker.setActive(true);
-	// Auto-generate worker code: WRK001, WRK002 etc
-long count = workerRepository.count() + 1;
-worker.setWorkerCode("WRK" + String.format("%03d", count));
-// Default password is their phone number, or "password123" if no phone
-String defaultPassword = (request.getPhone() != null && !request.getPhone().isEmpty())
-    ? request.getPhone()
-    : "password123";
-worker.setPassword(passwordEncoder.encode(defaultPassword));
+
+        long count = workerRepository.countByCompanyIdAndActiveTrue(companyId) + 1;
+        worker.setWorkerCode("WRK" + String.format("%03d", count));
+
+        String defaultPassword =
+            request.getPhone() != null && !request.getPhone().isEmpty()
+                ? request.getPhone()
+                : "password123";
+        worker.setPassword(passwordEncoder.encode(defaultPassword));
 
         Worker saved = workerRepository.save(worker);
         return WorkerResponse.from(saved);
@@ -101,6 +103,29 @@ worker.setPassword(passwordEncoder.encode(defaultPassword));
             .orElseThrow(() ->
                 new RuntimeException("Worker not found"));
         worker.setActive(false);
+        workerRepository.save(worker);
+    }
+
+    public void resetWorkerPassword(Long id, String newPassword) {
+        Long companyId = TenantContext.get();
+        Worker worker = workerRepository
+            .findByIdAndCompanyId(id, companyId)
+            .orElseThrow(() -> new RuntimeException("Worker not found"));
+
+        String passwordToSet = (newPassword == null || newPassword.isBlank())
+            ? worker.getPhone()
+            : newPassword;
+
+        if (passwordToSet == null || passwordToSet.isBlank()) {
+            throw new RuntimeException("Worker phone number is missing. Add phone number or provide a password.");
+        }
+
+        if ((newPassword != null && !newPassword.isBlank())
+            && !PasswordValidationUtil.isStrongPassword(newPassword)) {
+            throw new RuntimeException(PasswordValidationUtil.getRequirementsMessage());
+        }
+
+        worker.setPassword(passwordEncoder.encode(passwordToSet));
         workerRepository.save(worker);
     }
 }

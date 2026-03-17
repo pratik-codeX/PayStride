@@ -59,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+       config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:5174"));
         config.setAllowedMethods(Arrays.asList(
             "GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
@@ -77,7 +77,8 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/api/worker/login").permitAll()
+                .requestMatchers("/api/auth/**", "/api/worker/login",
+    "/api/worker/reset-password").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

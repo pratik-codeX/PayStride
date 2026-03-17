@@ -13,7 +13,8 @@ public class WorkerResponse {
     private BigDecimal hourlyRate;
     private LocalDate joiningDate;
     private boolean active;
-private String workerCode;
+    private String workerCode;
+
     public static WorkerResponse from(Worker worker) {
         WorkerResponse response = new WorkerResponse();
         response.id = worker.getId();
@@ -23,6 +24,7 @@ private String workerCode;
         response.hourlyRate = worker.getHourlyRate();
         response.joiningDate = worker.getJoiningDate();
         response.active = worker.isActive();
+        response.workerCode = worker.getWorkerCode();
         return response;
     }
 
@@ -35,4 +37,3 @@ private String workerCode;
     public boolean isActive() { return active; }
     public String getWorkerCode() { return workerCode; }
 }
-

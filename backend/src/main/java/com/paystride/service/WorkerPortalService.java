@@ -1,5 +1,7 @@
 package com.paystride.service;
 
+import com.paystride.entity.LeaveRequest;
+import com.paystride.repository.LeaveRequestRepository;
 import com.paystride.dto.HoursResponse;
 import com.paystride.dto.PayrollResponse;
 import com.paystride.dto.WorkerAuthResponse;
@@ -13,6 +15,7 @@ import com.paystride.repository.DailyHoursRepository;
 import com.paystride.repository.PayrollSummaryRepository;
 import com.paystride.repository.WorkerRepository;
 import com.paystride.security.JwtUtil;
+import com.paystride.util.PasswordValidationUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,16 +36,19 @@ public class WorkerPortalService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+	private final LeaveRequestRepository leaveRequestRepository;
     public WorkerPortalService(WorkerRepository workerRepository,
                                 DailyHoursRepository dailyHoursRepository,
                                 PayrollSummaryRepository payrollSummaryRepository,
                                 AdvanceRequestRepository advanceRequestRepository,
+				LeaveRequestRepository leaveRequestRepository,
                                 PasswordEncoder passwordEncoder,
                                 JwtUtil jwtUtil) {
         this.workerRepository = workerRepository;
         this.dailyHoursRepository = dailyHoursRepository;
         this.payrollSummaryRepository = payrollSummaryRepository;
         this.advanceRequestRepository = advanceRequestRepository;
+	this.leaveRequestRepository = leaveRequestRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
@@ -145,4 +151,56 @@ public class WorkerPortalService {
         }
         return result;
     }
+public void resetWorkerPassword(String workerCode, String phone,
+                                  String newPassword) {
+    throw new RuntimeException("Worker password can only be changed by admin");
+}
+
+public void changeWorkerPassword(Long workerId, String oldPassword,
+                                   String newPassword) {
+    throw new RuntimeException("Worker password can only be changed by admin");
+}
+
+public Map<String, Object> requestLeave(Long workerId, String leaveDate,
+                                         String leaveType, String reason) {
+    Worker worker = workerRepository.findById(workerId)
+        .orElseThrow(() -> new RuntimeException("Worker not found"));
+
+    LeaveRequest leave = new LeaveRequest();
+    leave.setWorker(worker);
+    leave.setCompany(worker.getCompany());
+    leave.setLeaveDate(java.time.LocalDate.parse(leaveDate));
+    leave.setLeaveType(leaveType);
+    leave.setReason(reason);
+    leave.setStatus("PENDING");
+
+    LeaveRequest saved = leaveRequestRepository.save(leave);
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("id", saved.getId());
+    response.put("leaveDate", saved.getLeaveDate());
+    response.put("leaveType", saved.getLeaveType());
+    response.put("status", saved.getStatus());
+    response.put("message", "Leave request submitted successfully");
+    return response;
+}
+
+public List<Map<String, Object>> getMyLeaves(Long workerId) {
+    List<LeaveRequest> leaves =
+        leaveRequestRepository.findByWorkerIdOrderByRequestedAtDesc(workerId);
+
+    List<Map<String, Object>> result = new ArrayList<>();
+    for (LeaveRequest l : leaves) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", l.getId());
+        map.put("leaveDate", l.getLeaveDate());
+        map.put("leaveType", l.getLeaveType());
+        map.put("reason", l.getReason());
+        map.put("status", l.getStatus());
+        map.put("reviewNote", l.getReviewNote());
+        map.put("requestedAt", l.getRequestedAt());
+        result.add(map);
+    }
+    return result;
+}
 }

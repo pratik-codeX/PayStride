@@ -1,5 +1,8 @@
 package com.paystride.controller;
 
+import org.springframework.security.core.Authentication;
+import java.util.HashMap;
+import java.util.Map;
 import com.paystride.dto.HoursResponse;
 import com.paystride.dto.PayrollResponse;
 import com.paystride.dto.WorkerAuthResponse;
@@ -77,4 +80,52 @@ public class WorkerPortalController {
         Long workerId = jwtUtil.extractWorkerId(token);
         return ResponseEntity.ok(workerPortalService.getMyAdvances(workerId));
     }
+
+@PostMapping("/reset-password")
+public ResponseEntity<Map<String, Object>> resetWorkerPassword(
+        @RequestBody Map<String, String> body) {
+    String workerCode = body.get("workerCode");
+    String phone = body.get("phone");
+    String newPassword = body.get("newPassword");
+    workerPortalService.resetWorkerPassword(workerCode, phone, newPassword);
+    Map<String, Object> response = new HashMap<>();
+    response.put("message", "Password reset successfully");
+    return ResponseEntity.ok(response);
+}
+
+@PostMapping("/change-password")
+public ResponseEntity<Map<String, Object>> changeWorkerPassword(
+        @RequestHeader("Authorization") String authHeader,
+        @RequestBody Map<String, String> body) {
+    String token = authHeader.substring(7);
+    Long workerId = jwtUtil.extractWorkerId(token);
+    String oldPassword = body.get("oldPassword");
+    String newPassword = body.get("newPassword");
+    workerPortalService.changeWorkerPassword(workerId, oldPassword, newPassword);
+    Map<String, Object> response = new HashMap<>();
+    response.put("message", "Password changed successfully");
+    return ResponseEntity.ok(response);
+}
+
+@PostMapping("/leave-request")
+public ResponseEntity<Map<String, Object>> requestLeave(
+        @RequestHeader("Authorization") String authHeader,
+        @RequestBody Map<String, String> body) {
+    String token = authHeader.substring(7);
+    Long workerId = jwtUtil.extractWorkerId(token);
+    return ResponseEntity.ok(workerPortalService.requestLeave(
+        workerId,
+        body.get("leaveDate"),
+        body.get("leaveType"),
+        body.get("reason")
+    ));
+}
+
+@GetMapping("/my-leaves")
+public ResponseEntity<List<Map<String, Object>>> getMyLeaves(
+        @RequestHeader("Authorization") String authHeader) {
+    String token = authHeader.substring(7);
+    Long workerId = jwtUtil.extractWorkerId(token);
+    return ResponseEntity.ok(workerPortalService.getMyLeaves(workerId));
+}
 }

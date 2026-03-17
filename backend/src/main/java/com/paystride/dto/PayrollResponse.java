@@ -7,6 +7,7 @@ public class PayrollResponse {
 
     private Long workerId;
     private String workerName;
+    private String workerPhone;
     private String department;
     private String monthYear;
     private BigDecimal totalHours;
@@ -17,24 +18,26 @@ public class PayrollResponse {
     private BigDecimal esiDeduction;
     private BigDecimal netPay;
 
-    public static PayrollResponse from(PayrollSummary ps) {
+    public static PayrollResponse from(PayrollSummary summary) {
         PayrollResponse r = new PayrollResponse();
-        r.workerId = ps.getWorker().getId();
-        r.workerName = ps.getWorker().getName();
-        r.department = ps.getWorker().getDepartment();
-        r.monthYear = ps.getMonthYear();
-        r.totalHours = ps.getTotalHours();
-        r.regularHours = ps.getRegularHours();
-        r.overtimeHours = ps.getOvertimeHours();
-        r.grossPay = ps.getGrossPay();
-        r.pfDeduction = ps.getPfDeduction();
-        r.esiDeduction = ps.getEsiDeduction();
-        r.netPay = ps.getNetPay();
+        r.workerId = summary.getWorker().getId();
+        r.workerName = summary.getWorker().getName();
+        r.workerPhone = summary.getWorker().getPhone();
+        r.department = summary.getWorker().getDepartment();
+        r.monthYear = summary.getMonthYear();
+        r.totalHours = summary.getTotalHours();
+        r.regularHours = summary.getRegularHours();
+        r.overtimeHours = summary.getOvertimeHours();
+        r.grossPay = summary.getGrossPay();
+        r.pfDeduction = summary.getPfDeduction();
+        r.esiDeduction = summary.getEsiDeduction();
+        r.netPay = summary.getNetPay();
         return r;
     }
 
     public Long getWorkerId() { return workerId; }
     public String getWorkerName() { return workerName; }
+    public String getWorkerPhone() { return workerPhone; }
     public String getDepartment() { return department; }
     public String getMonthYear() { return monthYear; }
     public BigDecimal getTotalHours() { return totalHours; }

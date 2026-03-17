@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/workers")
@@ -54,5 +56,18 @@ public class WorkerController {
     public ResponseEntity<Void> deleteWorker(@PathVariable Long id) {
         workerService.deleteWorker(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/reset-password")
+    public ResponseEntity<Map<String, Object>> resetWorkerPassword(
+            @PathVariable Long id,
+            @RequestBody(required = false) Map<String, String> body) {
+        String newPassword = body == null ? null : body.get("newPassword");
+        workerService.resetWorkerPassword(id, newPassword);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", newPassword == null || newPassword.isBlank()
+            ? "Worker password reset to phone number successfully"
+            : "Worker password updated successfully");
+        return ResponseEntity.ok(response);
     }
 }

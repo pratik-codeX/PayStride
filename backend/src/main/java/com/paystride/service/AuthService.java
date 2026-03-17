@@ -1,5 +1,6 @@
 package com.paystride.service;
 
+import org.springframework.security.core.Authentication;
 import com.paystride.dto.AuthResponse;
 import com.paystride.dto.LoginRequest;
 import com.paystride.dto.RegisterRequest;
@@ -9,6 +10,7 @@ import com.paystride.entity.UserRole;
 import com.paystride.repository.CompanyRepository;
 import com.paystride.repository.UserRepository;
 import com.paystride.security.JwtUtil;
+import com.paystride.util.PasswordValidationUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,7 @@ public class AuthService {
         company.setName(request.getCompanyName());
         company.setCity(request.getCompanyCity());
         company.setEmail(request.getCompanyEmail());
+        company.setContactNumber(request.getCompanyContact());
         Company savedCompany = companyRepository.save(company);
 
         User user = new User();
@@ -85,5 +88,29 @@ public class AuthService {
                 user.getCompany().getName()
         );
     }
+public void changePassword(String oldPassword, String newPassword,
+                            Authentication authentication) {
+    if (!PasswordValidationUtil.isStrongPassword(newPassword)) {
+        throw new RuntimeException(PasswordValidationUtil.getRequirementsMessage());
+    }
+    String email = authentication.getName();
+    User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        throw new RuntimeException("Current password is incorrect");
+    }
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
 }
 
+public void forgotPassword(String email, String newPassword) {
+    if (!PasswordValidationUtil.isStrongPassword(newPassword)) {
+        throw new RuntimeException(PasswordValidationUtil.getRequirementsMessage());
+    }
+    User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new RuntimeException("No account found with this email"));
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
+}
+
+}

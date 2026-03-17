@@ -70,4 +70,17 @@ public class PayrollSummary {
     @CreationTimestamp
     @Column(name = "generated_at", updatable = false)
     private LocalDateTime generatedAt;
+public BigDecimal getTotalHours() { return totalHours; }
+public BigDecimal getRegularHours() { return regularHours; }
+public BigDecimal getOvertimeHours() { return overtimeHours; }
+public BigDecimal getGrossPay() { return grossPay; }
+public BigDecimal getPfDeduction() { return pfDeduction; }
+public BigDecimal getEsiDeduction() { return esiDeduction; }
+public BigDecimal getNetPay() { return netPay; }
+public String getMonthYear() { return monthYear; }
+public Worker getWorker() { return worker; }
+public Company getCompany() { return company; }
+public Long getId() { return id; }
+public LocalDateTime getGeneratedAt() { return generatedAt; }
+
 }

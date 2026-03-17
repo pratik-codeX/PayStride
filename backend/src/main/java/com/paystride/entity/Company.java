@@ -28,6 +28,22 @@ public class Company {
     @NotBlank
     private String email;
 
+    @NotBlank
+    @Column(name = "contact_number")
+    private String contactNumber;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
+public Long getId() { return id; }
+public String getName() { return name; }
+public String getCity() { return city; }
+public String getEmail() { return email; }
+public String getContactNumber() { return contactNumber; }
+public java.time.LocalDateTime getCreatedAt() { return createdAt; }
+public void setId(Long id) { this.id = id; }
+public void setName(String name) { this.name = name; }
+public void setCity(String city) { this.city = city; }
+public void setEmail(String email) { this.email = email; }
+public void setContactNumber(String contactNumber) { this.contactNumber = contactNumber; }
+
 }
