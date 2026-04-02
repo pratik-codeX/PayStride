@@ -70,6 +70,7 @@ export default function HomePage() {
             <a href="#about" className={styles.mobileLink} onClick={() => setMenuOpen(false)}>About</a>
             <a href="#contact" className={styles.mobileLink} onClick={() => setMenuOpen(false)}>Contact</a>
             <Link to="/login" className={styles.mobileLink} onClick={() => setMenuOpen(false)}>Sign In</Link>
+            <Link to="/worker-login" className={styles.mobileLink} onClick={() => setMenuOpen(false)}>Worker Sign In</Link>
             <Link to="/register" className={`btn btn-gold ${styles.mobileBtn}`} onClick={() => setMenuOpen(false)}>Get Started</Link>
           </div>
         )}
@@ -293,7 +294,8 @@ export default function HomePage() {
             <a href="#features">Features</a>
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
-            <Link to="/login">Login</Link>
+            <Link to="/login">Admin Sign In</Link>
+            <Link to="/worker-login">Worker Sign In</Link>
           </div>
         </div>
       </footer>

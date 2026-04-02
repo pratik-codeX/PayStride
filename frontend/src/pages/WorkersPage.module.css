@@ -6,9 +6,9 @@
 }
 
 .pageHeaderInner {
-  max-width: 1280px;
+  max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: 34px 28px;
+  padding: 34px var(--page-gutter);
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -26,7 +26,7 @@
 .pageSubtitle {
   margin-top: 8px;
   color: rgba(255, 255, 255, 0.72);
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .header {
@@ -49,10 +49,10 @@
 .search {
   width: min(360px, 100%);
   padding: 13px 16px;
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border-soft);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.92);
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text);
   box-shadow: var(--shadow);
   transition: all 0.2s ease;
@@ -61,7 +61,7 @@
 .search:focus {
   outline: none;
   border-color: var(--navy-300);
-  box-shadow: 0 0 0 4px rgba(47, 77, 138, 0.12);
+  box-shadow: 0 0 0 3px rgba(47, 77, 138, 0.1);
   background: white;
 }
 
@@ -92,7 +92,7 @@
 }
 
 .infoText {
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.6;
 }
 
@@ -102,7 +102,7 @@
   padding: 80px 24px;
   color: var(--text-muted);
   background: white;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-soft);
   border-radius: 22px;
   box-shadow: var(--shadow);
 }
@@ -113,14 +113,14 @@
 }
 
 .emptyTitle {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--navy-700);
   margin-bottom: 8px;
 }
 
 .emptyDesc {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .workerCell {
@@ -146,6 +146,7 @@
 }
 
 .workerName {
+  font-size: 16px;
   font-weight: 700;
   color: var(--navy-700);
 }
@@ -160,7 +161,7 @@
   background: #eff6ff;
   color: var(--navy-500);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.04em;
   transition: transform 0.15s ease, background 0.15s ease;
@@ -187,7 +188,7 @@
 
 .perHr {
   margin-left: 4px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
   font-weight: 500;
 }
@@ -203,7 +204,7 @@
 .deleteBtn {
   padding: 7px 13px;
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   border: 1px solid;
   transition: all 0.15s ease;
@@ -267,7 +268,7 @@
 
 @media (max-width: 768px) {
   .pageHeaderInner {
-    padding: 28px 16px;
+    padding: 28px var(--page-gutter);
   }
 
   .headerRight {

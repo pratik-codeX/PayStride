@@ -61,7 +61,7 @@ export default function Navbar() {
                   <span className={styles.userName}>{user?.name?.split(' ')[0]}</span>
                   <span className={styles.userRole}>{user?.companyName}</span>
                 </div>
-                <span style={{ fontSize: 9, color: 'var(--text-muted)', marginLeft: 4 }}>▼</span>
+                <span style={{ fontSize: 10, color: 'var(--text-muted)', marginLeft: 4 }}>▼</span>
               </div>
 
               {showUserMenu && (
@@ -83,7 +83,7 @@ export default function Navbar() {
                       width: '100%',
                       textAlign: 'left',
                       padding: '12px 16px',
-                      fontSize: 13,
+                      fontSize: 14,
                       color: 'var(--text)',
                       background: 'transparent',
                       border: 'none',
@@ -104,7 +104,7 @@ export default function Navbar() {
                       width: '100%',
                       textAlign: 'left',
                       padding: '12px 16px',
-                      fontSize: 13,
+                      fontSize: 14,
                       color: 'var(--danger)',
                       background: 'transparent',
                       border: 'none',
@@ -147,7 +147,7 @@ export default function Navbar() {
                 border: 'none',
                 textAlign: 'left',
                 padding: '12px 20px',
-                fontSize: 14,
+                fontSize: 15,
                 color: 'var(--text)',
                 cursor: 'pointer',
                 display: 'flex',

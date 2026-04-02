@@ -6,7 +6,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('paystride_token')
+  const token = sessionStorage.getItem('paystride_token')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -17,6 +17,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      sessionStorage.removeItem('paystride_token')
+      sessionStorage.removeItem('paystride_user')
       localStorage.removeItem('paystride_token')
       localStorage.removeItem('paystride_user')
       window.location.href = '/login'

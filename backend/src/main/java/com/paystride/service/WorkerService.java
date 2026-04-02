@@ -66,8 +66,7 @@ public WorkerService(WorkerRepository workerRepository,
         worker.setJoiningDate(request.getJoiningDate());
         worker.setActive(true);
 
-        long count = workerRepository.countByCompanyIdAndActiveTrue(companyId) + 1;
-        worker.setWorkerCode("WRK" + String.format("%03d", count));
+        worker.setWorkerCode(generateUniqueWorkerCode(companyId));
 
         String defaultPassword =
             request.getPhone() != null && !request.getPhone().isEmpty()
@@ -127,5 +126,21 @@ public WorkerService(WorkerRepository workerRepository,
 
         worker.setPassword(passwordEncoder.encode(passwordToSet));
         workerRepository.save(worker);
+    }
+
+    private String generateUniqueWorkerCode(Long companyId) {
+        long nextNumber = workerRepository.countByCompanyId(companyId) + 1;
+        String workerCode = formatWorkerCode(nextNumber);
+
+        while (workerRepository.existsByWorkerCode(workerCode)) {
+            nextNumber++;
+            workerCode = formatWorkerCode(nextNumber);
+        }
+
+        return workerCode;
+    }
+
+    private String formatWorkerCode(long number) {
+        return "WRK" + String.format("%03d", number);
     }
 }

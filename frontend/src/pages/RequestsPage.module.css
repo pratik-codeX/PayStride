@@ -9,8 +9,8 @@
 }
 
 .title {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 30px;
+  font-weight: 800;
   color: var(--text);
   letter-spacing: -0.02em;
   margin-bottom: 4px;
@@ -21,7 +21,7 @@
 }
 
 .subtitle {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-muted);
 }
 
@@ -34,7 +34,7 @@
   border: 1px solid #fcd34d;
   border-radius: 30px;
   padding: 8px 20px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   animation: pulse 2s ease-in-out infinite;
 }
@@ -53,7 +53,7 @@
   flex-wrap: wrap;
   gap: 16px;
   background: white;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
   padding: 16px 20px;
   box-shadow: var(--shadow);
@@ -74,8 +74,8 @@
   gap: 8px;
   padding: 10px 24px;
   border-radius: 30px;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   border: none;
   background: transparent;
   color: var(--text-muted);
@@ -99,7 +99,7 @@
   background: var(--danger);
   color: white;
   border-radius: 20px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   padding: 2px 8px;
   min-width: 22px;
@@ -119,9 +119,9 @@
 .filterBtn {
   padding: 8px 16px;
   border-radius: 30px;
-  font-size: 13px;
-  font-weight: 500;
-  border: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--border-soft);
   background: white;
   color: var(--text-muted);
   cursor: pointer;
@@ -157,8 +157,8 @@
   border-radius: 10px;
   background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
   color: var(--primary);
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -166,13 +166,14 @@
 }
 
 .workerName {
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   color: var(--text);
   margin-bottom: 2px;
 }
 
 .workerCode {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
   font-family: 'DM Mono', monospace;
 }
@@ -183,8 +184,8 @@
   gap: 6px;
   padding: 8px 16px;
   border-radius: 30px;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 700;
   border: 1px solid var(--primary);
   background: #eff6ff;
   color: var(--primary);
@@ -209,7 +210,7 @@
   border-radius: var(--radius);
   padding: 20px;
   margin-bottom: 20px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-soft);
 }
 
 .reviewRow {
@@ -217,7 +218,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 0;
-  font-size: 14px;
+  font-size: 15px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -233,7 +234,7 @@
 .reviewRow strong {
   color: var(--text);
   font-family: 'DM Mono', monospace;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .reviewActions {
@@ -250,7 +251,7 @@
   text-align: center;
   padding: 80px 20px;
   background: white;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   animation: fadeIn 0.3s ease;

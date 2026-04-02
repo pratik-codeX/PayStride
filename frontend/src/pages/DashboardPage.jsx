@@ -9,15 +9,17 @@ import styles from './DashboardPage.module.css'
 export default function DashboardPage() {
   const [stats, setStats] = useState(null)
   const [analytics, setAnalytics] = useState(null)
+  const [workers, setWorkers] = useState([])
   const [loading, setLoading] = useState(true)
   const { user } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
-    Promise.all([api.get('/dashboard'), api.get('/analytics')])
-      .then(([dashboardRes, analyticsRes]) => {
+    Promise.all([api.get('/dashboard'), api.get('/analytics'), api.get('/workers')])
+      .then(([dashboardRes, analyticsRes, workersRes]) => {
         setStats(dashboardRes.data)
         setAnalytics(analyticsRes.data)
+        setWorkers(workersRes.data || [])
       })
       .catch(() => toast.error('Failed to load dashboard'))
       .finally(() => setLoading(false))
@@ -77,6 +79,17 @@ export default function DashboardPage() {
     (max, item) => Math.max(max, Number(item.overtimeHours || 0)),
     0
   )
+  const featuredWorkers = workers.slice(0, 4)
+  const activeWorkers = workers.filter(worker => worker.active)
+
+  function getInitials(name) {
+    return (name || '')
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(part => part[0]?.toUpperCase())
+      .join('') || 'W'
+  }
 
   return (
     <div className="page-wrapper">
@@ -204,6 +217,90 @@ export default function DashboardPage() {
                     <span>Generate your first payroll</span>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.section}>
+            <h2 className={styles.sectionHeading}>Employee Spotlight</h2>
+            <div className={styles.teamGrid}>
+              <div className={styles.teamCard}>
+                <div className={styles.teamCardHeader}>
+                  <div>
+                    <strong>Team on duty</strong>
+                    <span>Quick visual roster for your admin dashboard</span>
+                  </div>
+                  <button className={styles.teamLink} onClick={() => navigate('/workers')}>
+                    View all workers
+                  </button>
+                </div>
+
+                {featuredWorkers.length > 0 ? (
+                  <div className={styles.teamList}>
+                    {featuredWorkers.map((worker, index) => (
+                      <div
+                        key={worker.id}
+                        className={styles.teamMember}
+                        style={{ animationDelay: `${index * 0.06}s` }}
+                      >
+                        <div className={styles.teamAvatar}>
+                          <span>{getInitials(worker.name)}</span>
+                        </div>
+                        <div className={styles.teamMeta}>
+                          <strong>{worker.name}</strong>
+                          <span>{worker.department || 'General team'}</span>
+                        </div>
+                        <div className={styles.teamSide}>
+                          <span className={styles.teamCode}>{worker.workerCode || 'No ID'}</span>
+                          <span className={worker.active ? styles.teamActive : styles.teamInactive}>
+                            {worker.active ? 'Active' : 'Inactive'}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className={styles.teamEmpty}>Add workers to show employee avatars on the dashboard.</div>
+                )}
+              </div>
+
+              <div className={styles.teamCard}>
+                <div className={styles.teamCardHeader}>
+                  <div>
+                    <strong>Headcount snapshot</strong>
+                    <span>A lightweight team summary for this month</span>
+                  </div>
+                </div>
+
+                <div className={styles.teamStats}>
+                  <div className={styles.teamStat}>
+                    <span className={styles.teamStatLabel}>Active workers</span>
+                    <strong>{activeWorkers.length}</strong>
+                  </div>
+                  <div className={styles.teamStat}>
+                    <span className={styles.teamStatLabel}>Departments</span>
+                    <strong>{departmentData.length || '—'}</strong>
+                  </div>
+                  <div className={styles.teamStat}>
+                    <span className={styles.teamStatLabel}>Newest roster cards</span>
+                    <strong>{featuredWorkers.length}</strong>
+                  </div>
+                </div>
+
+                {featuredWorkers.length > 0 && (
+                  <div className={styles.avatarStrip}>
+                    {featuredWorkers.map(worker => (
+                      <div key={worker.id} className={styles.avatarChip} title={worker.name}>
+                        <span>{getInitials(worker.name)}</span>
+                      </div>
+                    ))}
+                    {workers.length > featuredWorkers.length && (
+                      <div className={`${styles.avatarChip} ${styles.avatarChipMore}`}>
+                        +{workers.length - featuredWorkers.length}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
