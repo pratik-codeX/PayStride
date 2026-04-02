@@ -1,0 +1,10 @@
+/.metadata/
+/.vscode/
+
+frontend/node_modules/
+frontend/dist/
+
+backend/target/
+backend/bin/
+
+.DS_Store
